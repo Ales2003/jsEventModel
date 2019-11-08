@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<script>
+    const OUTHER_HANDLER = 'Внешний обработчик!';
+    const MIDDLE_HANDLER = 'Cредний обработчик!';
+    const INNER_HANDLER = 'Внутренний обработчик!';
+    const OUTHER_PRE_HANDLER = 'Внешний перехватчик!';
+    const MIDDLE_PRE_HANDLER = 'Cредний перехватчик!';
+    const INNER_PRE_HANDLER = 'Внутренний перехватчик!';
+</script>
+
+<body>
+    <!-- Section 1 -->
+    <h1>Plain onclick event</h1>
+    <button type="button" onclick="document.getElementById('demo').innerHTML = Date()">
+        Click me to display Date and Time.
+    </button>
+    <p id="demo"></p>
+    <!-- Section 2 -->
+    <h1>Установление обработчика события в коде HTML через аттрибут тега</h1>
+    <div onclick='alert(OUTHER_HANDLER)'>
+        <div onclick='alert(MIDDLE_HANDLER)'>
+            <button type="button" onclick='alert(INNER_HANDLER); document.getElementById("demo1").innerHTML = Date()'>
+                Click me to display Date and Time.
+            </button>
+            <p id="demo1"></p>
+        </div>
+    </div>
+    <!-- Section 3 -->
+    <h1>Установление обработчика события в коде JS через свойство HTML-елемента</h1>
+    <div id='outherHandler'>
+        <div id='middleHandler'>
+            <button id='innerHandler' type="button" onclick='document.getElementById("demo2").innerHTML = Date()'>
+                Click me to display Date and Time.
+            </button>
+            <p id="demo2"></p>
+        </div>
+    </div>
+    <script>
+        const outherEl = document.querySelector('#outherHandler');
+        outherEl.onclick = function(event) {
+            alert(OUTHER_HANDLER);
+        }
+        const middleEl = document.querySelector('#middleHandler');
+        middleEl.onclick = function(event) {
+            alert(MIDDLE_HANDLER);
+        }
+        const innerEl = document.querySelector('#innerHandler');
+        innerEl.onclick = function(event) {
+            alert(INNER_HANDLER);
+        }
+    </script>
+    <!-- Section 4 -->
+    <h1>Установление обработчика и перехватчика события в коде JS вызовом метода HTML-елемента</h1>
+    <div id='outherHandler2'>
+        <div id='middleHandler2'>
+            <button id='innerHandler2' type="button" onclick='document.getElementById("demo3").innerHTML = Date()'>
+                Click me to display Date and Time.
+            </button>
+            <p id="demo3"></p>
+        </div>
+    </div>
+    <script>
+        const CLICK = 'click';
+        const outherEl2 = document.querySelector('#outherHandler2');
+        outherEl2.addEventListener(CLICK, doOPHAlert, true);
+        outherEl2.addEventListener(CLICK, doOHAlert, false);
+
+
+        const middleEl2 = document.querySelector('#middleHandler2');
+        middleEl2.addEventListener(CLICK, doMPHAlert, true);
+        middleEl2.addEventListener(CLICK, doMHAlert, false);
+
+
+        const innerEl2 = document.querySelector('#innerHandler2');
+        innerEl2.addEventListener(CLICK, doIPHAlert, true);
+        innerEl2.addEventListener(CLICK, doIHAlert, false);
+
+        //перехватчики
+        function doOPHAlert(evt) {
+            alert(OUTHER_PRE_HANDLER);
+        }
+
+        function doMPHAlert(evt) {
+            alert(MIDDLE_PRE_HANDLER);
+        }
+
+        function doIPHAlert(evt) {
+            alert(INNER_PRE_HANDLER);
+
+            //листенеры перестанут ловатиь, но браузер выполнит
+            //evt.stopPropagation();
+
+            //листенеры продолжат ловатиь, но браузер не выполнит
+            //evt.preventDefault();
+        }
+
+        //обработчики
+        function doOHAlert(evt) {
+            alert(OUTHER_HANDLER);
+        }
+
+        function doMHAlert(evt) {
+            alert(MIDDLE_HANDLER);
+        }
+
+        function doIHAlert(evt) {
+            alert(INNER_HANDLER);
+        }
+    </script>
+</body>
+
+</html>
